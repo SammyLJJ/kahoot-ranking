@@ -1,0 +1,17 @@
+{
+  "name": "kahoot-ranking",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "next": "latest",
+    "papaparse": "^5.3.2",
+    "framer-motion": "^10.12.2"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  }
+}
