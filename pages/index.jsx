@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
-import Papa from "papaparse";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useRef } from 'react';
+import Papa from 'papaparse';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   const [data, setData] = useState([]);
   const [topN, setTopN] = useState(3);
   const [showPodium, setShowPodium] = useState(false);
   const [animationData, setAnimationData] = useState([]);
+  const audioRef = useRef(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,7 +26,6 @@ export default function Home() {
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
@@ -59,7 +59,7 @@ export default function Home() {
               <div className="text-xl font-bold mb-2">{winner.name}</div>
               <div className="text-3xl font-extrabold">{winner.currentScore}</div>
               <div className="mt-2 text-sm text-gray-600">
-                {index === 0 ? "🥇" : index === 1 ? "🥈" : "🥉"}
+                {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}
               </div>
             </motion.div>
           ))}
@@ -70,9 +70,10 @@ export default function Home() {
 
   return (
     <div className="p-10 min-h-screen bg-gray-100">
+      <audio ref={audioRef} src="/win.mp3" preload="auto" />
       {!showPodium ? (
         <div className="space-y-6">
-          <h1 className="text-4xl font-bold">Kahoot风格排行榜生成器</h1>
+          <h1 className="text-4xl font-bold">🏆 Kahoot 风格排行榜生成器</h1>
           <input type="file" accept=".csv" onChange={handleFileUpload} className="border p-2 rounded" />
           <div>
             <label className="font-semibold mr-2">领奖台人数:</label>
@@ -85,7 +86,17 @@ export default function Home() {
               max={10}
             />
           </div>
-          <button onClick={() => setShowPodium(true)} className="bg-blue-500 text-white p-2 rounded">生成领奖台</button>
+          <button
+            onClick={() => {
+              setShowPodium(true);
+              setTimeout(() => {
+                if (audioRef.current) audioRef.current.play();
+              }, 500);
+            }}
+            className="bg-blue-500 text-white p-2 rounded"
+          >
+            生成领奖台
+          </button>
         </div>
       ) : (
         renderPodium()
